@@ -1,0 +1,49 @@
+name: ForceCollector
+options:
+  bundleIdPrefix: com.jayvicsanantonio
+settings:
+  base:
+    SWIFT_VERSION: 6.0
+    IPHONEOS_DEPLOYMENT_TARGET: 17.0
+    TARGETED_DEVICE_FAMILY: 1
+targets:
+  ForceCollector:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: ForceCollector
+        excludes:
+          - Resources
+          - Assets.xcassets
+    resources:
+      - ForceCollector/Resources
+      - ForceCollector/Assets.xcassets
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.jayvicsanantonio.ForceCollector
+        PRODUCT_NAME: ForceCollector
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Force Collector
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_NSCameraUsageDescription: Scan Star Wars Black Series barcodes to quickly add figures to your collection.
+        INFOPLIST_KEY_UIStatusBarStyle: UIStatusBarStyleLightContent
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CURRENT_PROJECT_VERSION: 1
+        MARKETING_VERSION: 1.0
+    scheme:
+      testTargets:
+        - ForceCollectorTests
+  ForceCollectorTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - ForceCollectorTests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.jayvicsanantonio.ForceCollectorTests
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: ForceCollector

@@ -1,0 +1,541 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1858B430A304420F7573A6AC /* ForceCollectorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51B8D783ADC8B9B528A292D /* ForceCollectorApp.swift */; };
+		3D35275A42B39FED3D21CB51 /* WishlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C810B77980CF3222764F03 /* WishlistView.swift */; };
+		5BCB734BB29E89999562C8B1 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BA23A4B528BD9C5CBDE096 /* HomeView.swift */; };
+		65C3B720CDF911B9BB6ED6D6 /* CollectionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F441C5C9872659D5EE9B03B /* CollectionViews.swift */; };
+		6EA5C635AEF61DC6F917BE16 /* ForceCollectorServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265CD58C43C70DCF20FB7962 /* ForceCollectorServices.swift */; };
+		6FAB05EB9A72EE714C3859F8 /* ForceCollectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A04DA0FA15938DFE09882 /* ForceCollectorTests.swift */; };
+		A891D2EBA04469D5FFFC5EBC /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D4BF1856F2FC38D9A35189F /* AppTheme.swift */; };
+		B78BFD500B4AA2E5BFFFC0CC /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D3CE43F9DC979EC6F7EA1A /* ProfileView.swift */; };
+		BC6FF960C67475CE530A0A31 /* SharedUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F518DFA2ED87A4EE99E6B /* SharedUI.swift */; };
+		EE09A162F04FF41542D191E4 /* ScannerViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9897ED3915C5D94F11B438A5 /* ScannerViews.swift */; };
+		FCB6AA8030B3FEBF462808DE /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495CBD16C7CAC04F275F1A8A /* PreviewData.swift */; };
+		FD94BD3709F49147704DCCC6 /* ForceCollectorModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78DA55D3F46134D1CA9C3AC /* ForceCollectorModels.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BB8AB7F8D371576BBB571243 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F55DA1CF0A198315661E84B5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1D7D318C89C3628BBDFEF49F;
+			remoteInfo = ForceCollector;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0D4BF1856F2FC38D9A35189F /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		265CD58C43C70DCF20FB7962 /* ForceCollectorServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceCollectorServices.swift; sourceTree = "<group>"; };
+		2F441C5C9872659D5EE9B03B /* CollectionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViews.swift; sourceTree = "<group>"; };
+		320F518DFA2ED87A4EE99E6B /* SharedUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedUI.swift; sourceTree = "<group>"; };
+		437A04DA0FA15938DFE09882 /* ForceCollectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceCollectorTests.swift; sourceTree = "<group>"; };
+		495CBD16C7CAC04F275F1A8A /* PreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewData.swift; sourceTree = "<group>"; };
+		520525D077F77518936E84F1 /* ForceCollector.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ForceCollector.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		59B895CCBB020FAAD95A440F /* ForceCollectorTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ForceCollectorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		62D3CE43F9DC979EC6F7EA1A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		9897ED3915C5D94F11B438A5 /* ScannerViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerViews.swift; sourceTree = "<group>"; };
+		C5BA23A4B528BD9C5CBDE096 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		E2C810B77980CF3222764F03 /* WishlistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishlistView.swift; sourceTree = "<group>"; };
+		E78DA55D3F46134D1CA9C3AC /* ForceCollectorModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceCollectorModels.swift; sourceTree = "<group>"; };
+		F51B8D783ADC8B9B528A292D /* ForceCollectorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceCollectorApp.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		047305EB62C11231DB92EDF3 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				0D4BF1856F2FC38D9A35189F /* AppTheme.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		0E257BB4D79A3F7CCC7F1DCF /* PreviewSupport */ = {
+			isa = PBXGroup;
+			children = (
+				495CBD16C7CAC04F275F1A8A /* PreviewData.swift */,
+			);
+			path = PreviewSupport;
+			sourceTree = "<group>";
+		};
+		1676FD49B4FEB33696FA71BC /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				2C99B1348F8D59E810B1C320 /* Collection */,
+				F3F86AC76B80B10A06D13121 /* Home */,
+				BEDD1F62D3097A5B2F09EEDA /* Profile */,
+				96913E6F3907F2DD3B01C6CC /* Scanner */,
+				BCE2AC6C43625E82428BBC0F /* Wishlist */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		1E3FCB53E94D66A51678496F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				520525D077F77518936E84F1 /* ForceCollector.app */,
+				59B895CCBB020FAAD95A440F /* ForceCollectorTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		20FD9DD597E49B047E166FEE /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				265CD58C43C70DCF20FB7962 /* ForceCollectorServices.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		2339C620240D51A7B44B1AE5 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				F51B8D783ADC8B9B528A292D /* ForceCollectorApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		2C99B1348F8D59E810B1C320 /* Collection */ = {
+			isa = PBXGroup;
+			children = (
+				2F441C5C9872659D5EE9B03B /* CollectionViews.swift */,
+			);
+			path = Collection;
+			sourceTree = "<group>";
+		};
+		5E1635A0101FBDD8B112D319 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				320F518DFA2ED87A4EE99E6B /* SharedUI.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		7393CFF4CFC200442D04CD01 /* ForceCollectorTests */ = {
+			isa = PBXGroup;
+			children = (
+				437A04DA0FA15938DFE09882 /* ForceCollectorTests.swift */,
+			);
+			path = ForceCollectorTests;
+			sourceTree = "<group>";
+		};
+		77D75C506259EBE4AF681F89 /* ForceCollector */ = {
+			isa = PBXGroup;
+			children = (
+				2339C620240D51A7B44B1AE5 /* App */,
+				5E1635A0101FBDD8B112D319 /* Components */,
+				1676FD49B4FEB33696FA71BC /* Features */,
+				8578AC8232B80DF8312C125B /* Models */,
+				0E257BB4D79A3F7CCC7F1DCF /* PreviewSupport */,
+				20FD9DD597E49B047E166FEE /* Services */,
+				047305EB62C11231DB92EDF3 /* Theme */,
+			);
+			path = ForceCollector;
+			sourceTree = "<group>";
+		};
+		8578AC8232B80DF8312C125B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E78DA55D3F46134D1CA9C3AC /* ForceCollectorModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		96913E6F3907F2DD3B01C6CC /* Scanner */ = {
+			isa = PBXGroup;
+			children = (
+				9897ED3915C5D94F11B438A5 /* ScannerViews.swift */,
+			);
+			path = Scanner;
+			sourceTree = "<group>";
+		};
+		A25C30EDF8DEAB7B41016609 = {
+			isa = PBXGroup;
+			children = (
+				77D75C506259EBE4AF681F89 /* ForceCollector */,
+				7393CFF4CFC200442D04CD01 /* ForceCollectorTests */,
+				1E3FCB53E94D66A51678496F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BCE2AC6C43625E82428BBC0F /* Wishlist */ = {
+			isa = PBXGroup;
+			children = (
+				E2C810B77980CF3222764F03 /* WishlistView.swift */,
+			);
+			path = Wishlist;
+			sourceTree = "<group>";
+		};
+		BEDD1F62D3097A5B2F09EEDA /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				62D3CE43F9DC979EC6F7EA1A /* ProfileView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		F3F86AC76B80B10A06D13121 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				C5BA23A4B528BD9C5CBDE096 /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1D7D318C89C3628BBDFEF49F /* ForceCollector */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 45CF3421598C47FCB3B05D84 /* Build configuration list for PBXNativeTarget "ForceCollector" */;
+			buildPhases = (
+				1A9766B73AC49339D7247537 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ForceCollector;
+			packageProductDependencies = (
+			);
+			productName = ForceCollector;
+			productReference = 520525D077F77518936E84F1 /* ForceCollector.app */;
+			productType = "com.apple.product-type.application";
+		};
+		45B8B4B19EC9BFAE1F5787EB /* ForceCollectorTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 523F217B0E81BBB27B57893E /* Build configuration list for PBXNativeTarget "ForceCollectorTests" */;
+			buildPhases = (
+				586F074A8831819DB0800FD6 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B3970400B3406FD1E571F80F /* PBXTargetDependency */,
+			);
+			name = ForceCollectorTests;
+			packageProductDependencies = (
+			);
+			productName = ForceCollectorTests;
+			productReference = 59B895CCBB020FAAD95A440F /* ForceCollectorTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F55DA1CF0A198315661E84B5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = BB758318AF975DA64A66BFEF /* Build configuration list for PBXProject "ForceCollector" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = A25C30EDF8DEAB7B41016609;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 1E3FCB53E94D66A51678496F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1D7D318C89C3628BBDFEF49F /* ForceCollector */,
+				45B8B4B19EC9BFAE1F5787EB /* ForceCollectorTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1A9766B73AC49339D7247537 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A891D2EBA04469D5FFFC5EBC /* AppTheme.swift in Sources */,
+				65C3B720CDF911B9BB6ED6D6 /* CollectionViews.swift in Sources */,
+				1858B430A304420F7573A6AC /* ForceCollectorApp.swift in Sources */,
+				FD94BD3709F49147704DCCC6 /* ForceCollectorModels.swift in Sources */,
+				6EA5C635AEF61DC6F917BE16 /* ForceCollectorServices.swift in Sources */,
+				5BCB734BB29E89999562C8B1 /* HomeView.swift in Sources */,
+				FCB6AA8030B3FEBF462808DE /* PreviewData.swift in Sources */,
+				B78BFD500B4AA2E5BFFFC0CC /* ProfileView.swift in Sources */,
+				EE09A162F04FF41542D191E4 /* ScannerViews.swift in Sources */,
+				BC6FF960C67475CE530A0A31 /* SharedUI.swift in Sources */,
+				3D35275A42B39FED3D21CB51 /* WishlistView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		586F074A8831819DB0800FD6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6FAB05EB9A72EE714C3859F8 /* ForceCollectorTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B3970400B3406FD1E571F80F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1D7D318C89C3628BBDFEF49F /* ForceCollector */;
+			targetProxy = BB8AB7F8D371576BBB571243 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		06836CF8C67134E14ABBDD67 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		2D29947E638D2E83C39C6599 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jayvicsanantonio.ForceCollectorTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ForceCollector.app/ForceCollector";
+			};
+			name = Release;
+		};
+		4B58EC02D9D36C2F95BED589 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jayvicsanantonio.ForceCollectorTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ForceCollector.app/ForceCollector";
+			};
+			name = Debug;
+		};
+		6A14D3F2E3EC9922F999484B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Force Collector";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Scan Star Wars Black Series barcodes to quickly add figures to your collection.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jayvicsanantonio.ForceCollector;
+				PRODUCT_NAME = ForceCollector;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6F0E203D1B32717FB71D7BC0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		EB5133A3F81F4C9C51373D95 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Force Collector";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Scan Star Wars Black Series barcodes to quickly add figures to your collection.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jayvicsanantonio.ForceCollector;
+				PRODUCT_NAME = ForceCollector;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		45CF3421598C47FCB3B05D84 /* Build configuration list for PBXNativeTarget "ForceCollector" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6A14D3F2E3EC9922F999484B /* Debug */,
+				EB5133A3F81F4C9C51373D95 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		523F217B0E81BBB27B57893E /* Build configuration list for PBXNativeTarget "ForceCollectorTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B58EC02D9D36C2F95BED589 /* Debug */,
+				2D29947E638D2E83C39C6599 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		BB758318AF975DA64A66BFEF /* Build configuration list for PBXProject "ForceCollector" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6F0E203D1B32717FB71D7BC0 /* Debug */,
+				06836CF8C67134E14ABBDD67 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F55DA1CF0A198315661E84B5 /* Project object */;
+}
