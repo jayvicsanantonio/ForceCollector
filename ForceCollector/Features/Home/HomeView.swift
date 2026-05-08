@@ -15,7 +15,7 @@ struct DashboardView: View {
     var body: some View {
         let snapshot = analytics.snapshot(figures: figures, collection: collection, wishlist: wishlist)
 
-        StitchScreen(title: "Collector", trailingIcon: "gearshape.fill") {
+        StitchScreen(title: "Collector", subtitle: "Welcome back", trailingIcon: "gearshape.fill") {
             VStack(alignment: .leading, spacing: 24) {
                 HStack(spacing: 12) {
                     MetricCard(label: "Total Figs", value: "\(max(snapshot.totalCatalog, snapshot.ownedCount))", icon: "archivebox", accent: AppTheme.text)
@@ -87,10 +87,12 @@ struct DashboardView: View {
                                 ZStack(alignment: .leading) {
                                     RoundedRectangle(cornerRadius: 999)
                                         .fill(AppTheme.background)
-                                    RoundedRectangle(cornerRadius: 999)
-                                        .fill(AppTheme.electric)
-                                        .frame(width: max(8, proxy.size.width * snapshot.completionRatio))
-                                        .shadow(color: AppTheme.electric.opacity(0.55), radius: 12)
+                                    if snapshot.completionRatio > 0 {
+                                        RoundedRectangle(cornerRadius: 999)
+                                            .fill(AppTheme.electric)
+                                            .frame(width: max(8, proxy.size.width * snapshot.completionRatio))
+                                            .shadow(color: AppTheme.electric.opacity(0.55), radius: 12)
+                                    }
                                 }
                             }
                             .frame(height: 10)
@@ -135,7 +137,15 @@ struct DashboardView: View {
     private var recentFigures: [CatalogFigure] {
         let recentIDs = collection.map(\.figureID)
         let owned = repository.figures(for: recentIDs, in: figures)
-        return owned.isEmpty ? Array(figures.prefix(6)) : owned + figures.filter { recentIDs.contains($0.id) == false }
+        if owned.isEmpty {
+            return figures.sorted { left, right in
+                if StitchAsset.hasFigureImage(for: left) != StitchAsset.hasFigureImage(for: right) {
+                    return StitchAsset.hasFigureImage(for: left)
+                }
+                return left.sortIndex < right.sortIndex
+            }
+        }
+        return owned + figures.filter { recentIDs.contains($0.id) == false }
     }
 
     private func collectionValue(_ snapshot: AnalyticsSnapshot) -> String {
@@ -210,7 +220,7 @@ private struct RecentDropCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             ZStack(alignment: .topTrailing) {
-                StitchRemoteImage(urlString: StitchAsset.heroImage(for: figure), contentMode: .fill)
+                StitchFigureArtwork(figure: figure, contentMode: .fill)
                     .frame(width: 128, height: 214)
                     .clipped()
                     .overlay(

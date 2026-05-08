@@ -396,7 +396,7 @@ private struct CollectionFigureTile: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             ZStack(alignment: .topTrailing) {
-                StitchRemoteImage(urlString: StitchAsset.heroImage(for: figure), contentMode: .fill)
+                StitchFigureArtwork(figure: figure, contentMode: .fill)
                     .frame(height: 190)
                     .clipped()
 

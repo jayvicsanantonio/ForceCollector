@@ -2,11 +2,13 @@ import SwiftUI
 
 struct StitchScreen<Content: View>: View {
     let title: String
+    let subtitle: String?
     let trailingIcon: String
     let content: Content
 
-    init(title: String, trailingIcon: String = "gearshape", @ViewBuilder content: () -> Content) {
+    init(title: String, subtitle: String? = nil, trailingIcon: String = "gearshape", @ViewBuilder content: () -> Content) {
         self.title = title
+        self.subtitle = subtitle
         self.trailingIcon = trailingIcon
         self.content = content()
     }
@@ -14,7 +16,7 @@ struct StitchScreen<Content: View>: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-                StitchHeader(title: title, trailingIcon: trailingIcon)
+                StitchHeader(title: title, subtitle: subtitle, trailingIcon: trailingIcon)
                 content
             }
             .padding(.bottom, 110)
@@ -165,7 +167,7 @@ struct FigureHeroCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ZStack(alignment: .topLeading) {
-                StitchRemoteImage(urlString: StitchAsset.heroImage(for: figure), contentMode: .fill)
+                StitchFigureArtwork(figure: figure, contentMode: .fill)
                     .frame(height: 420)
                     .clipped()
 
@@ -283,6 +285,66 @@ struct StitchRemoteImage: View {
     }
 }
 
+struct StitchFigureArtwork: View {
+    let figure: CatalogFigure
+    var contentMode: ContentMode = .fill
+
+    var body: some View {
+        if let urlString = StitchAsset.heroImageURL(for: figure) {
+            StitchRemoteImage(urlString: urlString, contentMode: contentMode)
+        } else {
+            FigureFallbackArtwork(figure: figure)
+        }
+    }
+}
+
+private struct FigureFallbackArtwork: View {
+    let figure: CatalogFigure
+
+    var body: some View {
+        ZStack {
+            LinearGradient(
+                colors: [
+                    Color(hex: figure.accentHex).opacity(0.88),
+                    AppTheme.elevatedSurface,
+                    AppTheme.background
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+
+            Circle()
+                .fill(AppTheme.electric.opacity(0.16))
+                .frame(width: 170, height: 170)
+                .blur(radius: 22)
+                .offset(x: 36, y: -46)
+
+            VStack(alignment: .leading, spacing: 14) {
+                Spacer()
+
+                Image(systemName: figure.symbol)
+                    .font(.system(size: 54, weight: .black))
+                    .foregroundStyle(.white.opacity(0.9))
+                    .shadow(color: .black.opacity(0.35), radius: 16, x: 0, y: 8)
+
+                VStack(alignment: .leading, spacing: 5) {
+                    Text(figure.faction.rawValue.uppercased())
+                        .font(AppTheme.labelFont(size: 10, weight: .bold))
+                        .foregroundStyle(AppTheme.electric)
+                        .tracking(1.3)
+
+                    Text(figure.line)
+                        .font(AppTheme.labelFont(size: 13, weight: .bold))
+                        .foregroundStyle(.white.opacity(0.86))
+                        .lineLimit(2)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+            .padding(18)
+        }
+    }
+}
+
 struct StitchTabBar: View {
     @Binding var selectedTab: AppTab
 
@@ -361,7 +423,11 @@ enum StitchAsset {
         "mando-ahsoka-tano": "https://lh3.googleusercontent.com/aida-public/AB6AXuBTwe-CKJsR7FjDV8g6QkU-RRc7jPJTas0ZMHOKBX-SsBYj62KWyNaHdaFIbVZ7vN_090NW7dioY38NNb0-OE1FTwLoH-4Xxc9LIOlAPiLOJu3E83NQjY3X2g91AsiISMrv0g_WgxTk63ST0GPgwHEOA2vCBt5pqy6LZiJAdM3nZiZmncNLHjM2qZN26iHoEUU0RAwexjJIvxLUaRZrsk0nz4a7x1vlbNUM2xARke3_a7T5QE3OloApxr7IAk05qF6F-pHSKZldzDY"
     ]
 
-    static func heroImage(for figure: CatalogFigure) -> String {
-        figureImages[figure.id] ?? figureImages.values.first ?? avatar
+    static func heroImageURL(for figure: CatalogFigure) -> String? {
+        figureImages[figure.id]
+    }
+
+    static func hasFigureImage(for figure: CatalogFigure) -> Bool {
+        figureImages[figure.id] != nil
     }
 }

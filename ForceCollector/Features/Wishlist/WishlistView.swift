@@ -72,7 +72,7 @@ private struct WishlistRow: View {
 
     var body: some View {
         HStack(spacing: 14) {
-            StitchRemoteImage(urlString: StitchAsset.heroImage(for: figure), contentMode: .fill)
+            StitchFigureArtwork(figure: figure, contentMode: .fill)
                 .frame(width: 96, height: 96)
                 .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                 .overlay(RoundedRectangle(cornerRadius: 8).stroke(AppTheme.border, lineWidth: 1))
