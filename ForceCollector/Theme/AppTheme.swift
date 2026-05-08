@@ -1,28 +1,33 @@
 import SwiftUI
 
 enum AppTheme {
-    static let accent = Color(hex: "#1152D4")
-    static let gold = Color(hex: "#F6C453")
-    static let background = Color(hex: "#060B17")
-    static let surface = Color(hex: "#0E1629")
-    static let elevatedSurface = Color(hex: "#16213A")
+    static let accent = Color(hex: "#3B82F6")
+    static let electric = Color(hex: "#22D3EE")
+    static let scannerCyan = Color(hex: "#00E5FF")
+    static let gold = Color(hex: "#FACC15")
+    static let background = Color(hex: "#020617")
+    static let profileBackground = Color(hex: "#101622")
+    static let surface = Color(hex: "#0F172A")
+    static let elevatedSurface = Color(hex: "#1E293B")
+    static let deepPanel = Color(hex: "#0C1424")
     static let border = Color.white.opacity(0.08)
     static let text = Color.white
-    static let secondaryText = Color(hex: "#A8B3CF")
-    static let success = Color(hex: "#52D98C")
-    static let warning = Color(hex: "#FFB14A")
-    static let danger = Color(hex: "#FF6F7D")
+    static let secondaryText = Color(hex: "#94A3B8")
+    static let navIcon = Color(hex: "#BAE6FD")
+    static let success = Color(hex: "#4ADE80")
+    static let warning = Color(hex: "#60A5FA")
+    static let danger = Color(hex: "#F87171")
 
     static func displayFont(size: CGFloat, weight: Font.Weight = .semibold) -> Font {
-        .system(size: size, weight: weight, design: .rounded)
+        .system(size: size, weight: weight, design: .default)
+    }
+
+    static func labelFont(size: CGFloat, weight: Font.Weight = .medium) -> Font {
+        .system(size: size, weight: weight, design: .default)
     }
 
     static func panelFill(opacity: Double = 1) -> some ShapeStyle {
-        LinearGradient(
-            colors: [surface.opacity(opacity), elevatedSurface.opacity(opacity)],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
+        elevatedSurface.opacity(opacity)
     }
 }
 
