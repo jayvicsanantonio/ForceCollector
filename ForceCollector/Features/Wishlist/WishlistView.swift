@@ -101,11 +101,13 @@ private struct WishlistRow: View {
                 HStack(alignment: .bottom) {
                     VStack(alignment: .leading, spacing: 2) {
                         HStack(spacing: 6) {
-                            Text((item.targetPrice ?? figure.msrp).currencyString)
+                            Text(targetPrice.currencyString)
                                 .font(AppTheme.displayFont(size: 18, weight: .bold))
                                 .foregroundStyle(AppTheme.text)
 
-                            TrendBadge(direction: item.lastKnownPrice ?? 0 > (item.targetPrice ?? figure.msrp) ? .up : .down)
+                            if let trend {
+                                TrendBadge(direction: trend.direction, percent: trend.percent)
+                            }
                         }
 
                         Text(item.lastKnownPrice == nil ? "MSRP Target" : "Avg. Market Price")
@@ -129,25 +131,58 @@ private struct WishlistRow: View {
         .background(AppTheme.elevatedSurface, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 12).stroke(AppTheme.border, lineWidth: 1))
     }
+
+    private var targetPrice: Double {
+        item.targetPrice ?? figure.msrp
+    }
+
+    private var trend: (direction: TrendBadge.Direction, percent: Double)? {
+        guard let lastKnownPrice = item.lastKnownPrice, targetPrice > 0 else { return nil }
+        let delta = lastKnownPrice - targetPrice
+        let percent = abs(delta / targetPrice) * 100
+        if abs(delta) < 0.01 {
+            return (.stable, 0)
+        }
+        return (delta > 0 ? .up : .down, percent)
+    }
 }
 
 private struct TrendBadge: View {
     enum Direction {
-        case up, down
+        case up, down, stable
     }
 
     let direction: Direction
+    let percent: Double
 
     var body: some View {
         HStack(spacing: 2) {
-            Image(systemName: direction == .down ? "arrow.down.right" : "arrow.up.right")
+            Image(systemName: direction.symbolName)
                 .font(.system(size: 9, weight: .bold))
-            Text(direction == .down ? "12%" : "5%")
+            Text("\(Int(percent.rounded()))%")
                 .font(AppTheme.labelFont(size: 10, weight: .bold))
         }
-        .foregroundStyle(direction == .down ? AppTheme.electric : AppTheme.warning)
+        .foregroundStyle(direction.color)
         .padding(.horizontal, 6)
         .padding(.vertical, 3)
-        .background((direction == .down ? AppTheme.electric : AppTheme.warning).opacity(0.16), in: RoundedRectangle(cornerRadius: 4, style: .continuous))
+        .background(direction.color.opacity(0.16), in: RoundedRectangle(cornerRadius: 4, style: .continuous))
+    }
+}
+
+private extension TrendBadge.Direction {
+    var symbolName: String {
+        switch self {
+        case .up: "arrow.up.right"
+        case .down: "arrow.down.right"
+        case .stable: "minus"
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .up: AppTheme.warning
+        case .down: AppTheme.electric
+        case .stable: AppTheme.secondaryText
+        }
     }
 }

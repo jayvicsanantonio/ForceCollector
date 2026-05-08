@@ -10,6 +10,7 @@ struct ScanView: View {
 
     @State private var manualCode = ""
     @State private var currentResult: ScanLookupResult?
+    @State private var sessionScanCount = 0
     private let scannerService = ScannerService()
 
     var body: some View {
@@ -90,7 +91,7 @@ struct ScanView: View {
 
                     HStack(spacing: 6) {
                         Image(systemName: "clock.arrow.circlepath")
-                        Text("Session Scans: \(currentResult == nil ? 0 : 1)")
+                        Text("Session Scans: \(sessionScanCount)")
                     }
                     .font(AppTheme.labelFont(size: 10, weight: .bold))
                     .foregroundStyle(.white.opacity(0.62))
@@ -135,6 +136,7 @@ struct ScanView: View {
 
         let result = scannerService.resolveScan(code: trimmed, in: figures)
         currentResult = result
+        sessionScanCount += 1
         try? store.recordScan(code: trimmed, matchedFigureID: result.matchedFigure?.id, query: trimmed, context: modelContext)
         manualCode = ""
     }
@@ -375,21 +377,6 @@ final class ScannerPreviewView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .black
-
-        let overlay = UIView()
-        overlay.backgroundColor = .clear
-        overlay.layer.borderColor = UIColor.white.withAlphaComponent(0.22).cgColor
-        overlay.layer.borderWidth = 2
-        overlay.layer.cornerRadius = 24
-        overlay.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(overlay)
-
-        NSLayoutConstraint.activate([
-            overlay.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
-            overlay.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
-            overlay.topAnchor.constraint(equalTo: topAnchor, constant: 40),
-            overlay.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40)
-        ])
     }
 
     @available(*, unavailable)

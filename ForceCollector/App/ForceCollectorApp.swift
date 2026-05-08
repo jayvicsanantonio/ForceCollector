@@ -40,30 +40,38 @@ struct ForceCollectorRootView: View {
             AppTheme.background
                 .ignoresSafeArea()
 
-            Group {
-                switch selectedTab {
-                case .home:
-                    NavigationStack {
-                        DashboardView(store: store, selectedTab: $selectedTab)
-                    }
-                case .collection:
-                    NavigationStack {
-                        CollectionGridView(store: store)
-                    }
-                case .scan:
-                    NavigationStack {
-                        ScanView(store: store)
-                    }
-                case .wishlist:
-                    NavigationStack {
-                        WishlistView(store: store)
-                    }
-                case .profile:
-                    NavigationStack {
-                        ProfileView(store: store)
-                    }
+            TabView(selection: $selectedTab) {
+                NavigationStack {
+                    DashboardView(store: store, selectedTab: $selectedTab)
                 }
+                .tag(AppTab.home)
+                .tabItem { Label(AppTab.home.title, systemImage: AppTab.home.icon) }
+
+                NavigationStack {
+                    CollectionGridView(store: store)
+                }
+                .tag(AppTab.collection)
+                .tabItem { Label(AppTab.collection.title, systemImage: AppTab.collection.icon) }
+
+                NavigationStack {
+                    WishlistView(store: store)
+                }
+                .tag(AppTab.wishlist)
+                .tabItem { Label(AppTab.wishlist.title, systemImage: AppTab.wishlist.icon) }
+
+                NavigationStack {
+                    ScanView(store: store)
+                }
+                .tag(AppTab.scan)
+                .tabItem { Label(AppTab.scan.title, systemImage: AppTab.scan.icon) }
+
+                NavigationStack {
+                    ProfileView(store: store)
+                }
+                .tag(AppTab.profile)
+                .tabItem { Label(AppTab.profile.title, systemImage: AppTab.profile.icon) }
             }
+            .toolbar(.hidden, for: .tabBar)
 
             VStack {
                 Spacer()

@@ -136,16 +136,21 @@ struct DashboardView: View {
 
     private var recentFigures: [CatalogFigure] {
         let recentIDs = collection.map(\.figureID)
+        let recentIDSet = Set(recentIDs)
         let owned = repository.figures(for: recentIDs, in: figures)
         if owned.isEmpty {
-            return figures.sorted { left, right in
+            return Array(figures.sorted { left, right in
                 if StitchAsset.hasFigureImage(for: left) != StitchAsset.hasFigureImage(for: right) {
                     return StitchAsset.hasFigureImage(for: left)
                 }
                 return left.sortIndex < right.sortIndex
-            }
+            }.prefix(6))
         }
-        return owned + figures.filter { recentIDs.contains($0.id) == false }
+        var result = Array(owned.prefix(6))
+        if result.count < 6 {
+            result.append(contentsOf: figures.lazy.filter { recentIDSet.contains($0.id) == false }.prefix(6 - result.count))
+        }
+        return result
     }
 
     private func collectionValue(_ snapshot: AnalyticsSnapshot) -> String {

@@ -11,7 +11,7 @@ struct CollectionGridView: View {
 
     @State private var searchText = ""
     @State private var selectedEra: FigureEra?
-    @State private var selectedScope: CollectionScope = .allCatalog
+    @State private var selectedScope: CollectionScope = .owned
 
     private let repository = CatalogRepository()
 
@@ -195,15 +195,19 @@ struct FigureDetailView: View {
                     .foregroundStyle(.white)
                     .frame(width: 40, height: 40)
             }
+            .accessibilityLabel("Back")
 
             Text("Figure Details")
                 .font(AppTheme.displayFont(size: 18, weight: .bold))
                 .frame(maxWidth: .infinity)
 
-            Image(systemName: "square.and.arrow.up")
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundStyle(.white)
-                .frame(width: 40, height: 40)
+            ShareLink(item: shareText) {
+                Image(systemName: "square.and.arrow.up")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .frame(width: 40, height: 40)
+            }
+            .accessibilityLabel("Share \(figure.name)")
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
@@ -211,6 +215,10 @@ struct FigureDetailView: View {
         .overlay(alignment: .bottom) {
             Rectangle().fill(AppTheme.border).frame(height: 1)
         }
+    }
+
+    private var shareText: String {
+        "\(figure.name)\n\(figure.subtitle)\n\(figure.line)\n\(figure.wave)"
     }
 
     private func statusToggle(owned: Bool, wished: Bool) -> some View {
@@ -279,6 +287,12 @@ struct FigureDetailView: View {
 
                     Toggle("Favorite display piece", isOn: $favorite)
                         .tint(AppTheme.electric)
+
+                    TextField("Collection notes", text: $collectionNotes, axis: .vertical)
+                        .lineLimit(4, reservesSpace: true)
+                        .padding(12)
+                        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 12).stroke(AppTheme.border, lineWidth: 1))
 
                     Button("Save Owned Details") {
                         try? store.updateCollectionItem(

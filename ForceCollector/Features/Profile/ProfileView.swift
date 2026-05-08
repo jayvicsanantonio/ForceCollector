@@ -76,6 +76,7 @@ struct ProfileView: View {
                 .padding(.horizontal, 16)
 
                 Button {
+                    // TODO: Implement account logout when authentication exists.
                 } label: {
                     Label("Logout", systemImage: "rectangle.portrait.and.arrow.right")
                         .font(AppTheme.labelFont(size: 15, weight: .bold))
@@ -86,6 +87,8 @@ struct ProfileView: View {
                         .overlay(RoundedRectangle(cornerRadius: 16).stroke(AppTheme.border, lineWidth: 1))
                 }
                 .buttonStyle(.plain)
+                .disabled(true)
+                .opacity(0.5)
                 .padding(.horizontal, 16)
 
                 Text("App Version 2.4.1 (Build 1138)")

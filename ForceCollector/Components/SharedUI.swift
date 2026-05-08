@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct StitchScreen<Content: View>: View {
     let title: String
@@ -261,27 +262,69 @@ struct PriceField: View {
 struct StitchRemoteImage: View {
     let urlString: String
     var contentMode: ContentMode = .fill
+    @State private var loadedImage: UIImage?
 
     var body: some View {
-        AsyncImage(url: URL(string: urlString)) { phase in
-            switch phase {
-            case .success(let image):
-                image
+        Group {
+            if let loadedImage {
+                Image(uiImage: loadedImage)
                     .resizable()
                     .aspectRatio(contentMode: contentMode)
-            default:
-                ZStack {
-                    LinearGradient(
-                        colors: [AppTheme.elevatedSurface, AppTheme.surface],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                    Image(systemName: "sparkles")
-                        .font(.system(size: 26, weight: .bold))
-                        .foregroundStyle(AppTheme.electric.opacity(0.65))
-                }
+            } else {
+                remoteImagePlaceholder
             }
         }
+        .task(id: urlString) {
+            await loadImage()
+        }
+    }
+
+    private var remoteImagePlaceholder: some View {
+        ZStack {
+            LinearGradient(
+                colors: [AppTheme.elevatedSurface, AppTheme.surface],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            Image(systemName: "sparkles")
+                .font(.system(size: 26, weight: .bold))
+                .foregroundStyle(AppTheme.electric.opacity(0.65))
+        }
+    }
+
+    @MainActor
+    private func loadImage() async {
+        guard let url = URL(string: urlString) else { return }
+
+        if let cached = StitchImageCache.shared.image(for: url) {
+            loadedImage = cached
+            return
+        }
+
+        loadedImage = nil
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            guard let image = UIImage(data: data) else { return }
+            StitchImageCache.shared.insert(image, for: url)
+            loadedImage = image
+        } catch {
+            loadedImage = nil
+        }
+    }
+}
+
+@MainActor
+private final class StitchImageCache {
+    static let shared = StitchImageCache()
+
+    private let cache = NSCache<NSURL, UIImage>()
+
+    func image(for url: URL) -> UIImage? {
+        cache.object(forKey: url as NSURL)
+    }
+
+    func insert(_ image: UIImage, for url: URL) {
+        cache.setObject(image, forKey: url as NSURL)
     }
 }
 
