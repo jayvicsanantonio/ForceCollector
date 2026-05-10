@@ -2,22 +2,38 @@ import SwiftUI
 import UIKit
 
 struct StitchScreen<Content: View>: View {
+    @Environment(\.dismiss) private var dismiss
+
     let title: String
     let subtitle: String?
     let trailingIcon: String
+    let showsBackButton: Bool
     let content: Content
 
-    init(title: String, subtitle: String? = nil, trailingIcon: String = "gearshape", @ViewBuilder content: () -> Content) {
+    init(
+        title: String,
+        subtitle: String? = nil,
+        trailingIcon: String = "gearshape",
+        showsBackButton: Bool = false,
+        @ViewBuilder content: () -> Content
+    ) {
         self.title = title
         self.subtitle = subtitle
         self.trailingIcon = trailingIcon
+        self.showsBackButton = showsBackButton
         self.content = content()
     }
 
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-                StitchHeader(title: title, subtitle: subtitle, trailingIcon: trailingIcon)
+                StitchHeader(
+                    title: title,
+                    subtitle: subtitle,
+                    trailingIcon: trailingIcon,
+                    showsBackButton: showsBackButton,
+                    onBack: { dismiss() }
+                )
                 content
             }
             .padding(.bottom, 110)
@@ -32,13 +48,27 @@ struct StitchHeader: View {
     let title: String
     var subtitle: String?
     var trailingIcon: String = "gearshape"
+    var showsBackButton = false
+    var onBack: () -> Void = {}
 
     var body: some View {
         HStack(spacing: 12) {
-            StitchRemoteImage(urlString: StitchAsset.avatar, contentMode: .fill)
-                .frame(width: 40, height: 40)
-                .clipShape(Circle())
-                .overlay(Circle().stroke(AppTheme.electric.opacity(0.45), lineWidth: 2))
+            if showsBackButton {
+                Button(action: onBack) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 17, weight: .bold))
+                        .foregroundStyle(.white)
+                        .frame(width: 40, height: 40)
+                        .background(AppTheme.surface, in: Circle())
+                }
+                .accessibilityLabel("Back")
+                .buttonStyle(.plain)
+            } else {
+                StitchRemoteImage(urlString: StitchAsset.avatar, contentMode: .fill)
+                    .frame(width: 40, height: 40)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(AppTheme.electric.opacity(0.45), lineWidth: 2))
+            }
 
             VStack(alignment: .leading, spacing: 2) {
                 if let subtitle {
@@ -304,10 +334,14 @@ struct StitchRemoteImage: View {
         loadedImage = nil
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
+            guard Task.isCancelled == false else { return }
             guard let image = UIImage(data: data) else { return }
             StitchImageCache.shared.insert(image, for: url)
             loadedImage = image
+        } catch is CancellationError {
+            return
         } catch {
+            guard Task.isCancelled == false else { return }
             loadedImage = nil
         }
     }

@@ -41,13 +41,13 @@ struct DashboardView: View {
 
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) {
-                            ForEach(recentFigures.prefix(6), id: \.id) { figure in
+                            ForEach(recentFigures, id: \.id) { figure in
                                 NavigationLink {
                                     FigureDetailView(figure: figure, store: store)
                                 } label: {
                                     RecentDropCard(
                                         figure: figure,
-                                        isNew: store.isOwned(figure.id, items: collection)
+                                        isNew: isRecentlyAcquired(figure)
                                     )
                                 }
                                 .buttonStyle(.plain)
@@ -153,6 +153,16 @@ struct DashboardView: View {
         return result
     }
 
+    private func isRecentlyAcquired(_ figure: CatalogFigure) -> Bool {
+        guard let item = collection.first(where: { $0.figureID == figure.id }),
+              let threshold = Calendar.current.date(byAdding: .day, value: -14, to: .now)
+        else {
+            return false
+        }
+
+        return item.acquiredAt >= threshold
+    }
+
     private func collectionValue(_ snapshot: AnalyticsSnapshot) -> String {
         let value = snapshot.averageOwnedPrice * Double(max(snapshot.ownedCount, 1))
         return value >= 1000 ? "$\(String(format: "%.1fk", value / 1000))" : value.currencyString
@@ -163,7 +173,7 @@ struct AnalyticsView: View {
     let snapshot: AnalyticsSnapshot
 
     var body: some View {
-        StitchScreen(title: "Analytics", trailingIcon: "chart.xyaxis.line") {
+        StitchScreen(title: "Analytics", trailingIcon: "chart.xyaxis.line", showsBackButton: true) {
             VStack(alignment: .leading, spacing: 16) {
                 SectionTitle(
                     eyebrow: "Collection Intel",
