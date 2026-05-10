@@ -101,7 +101,7 @@ private struct WishlistRow: View {
                 HStack(alignment: .bottom) {
                     VStack(alignment: .leading, spacing: 2) {
                         HStack(spacing: 6) {
-                            Text(targetPrice.currencyString)
+                            Text(displayedPrice.currencyString)
                                 .font(AppTheme.displayFont(size: 18, weight: .bold))
                                 .foregroundStyle(AppTheme.text)
 
@@ -110,7 +110,7 @@ private struct WishlistRow: View {
                             }
                         }
 
-                        Text(item.lastKnownPrice == nil ? "MSRP Target" : "Avg. Market Price")
+                        Text(priceLabel)
                             .font(AppTheme.labelFont(size: 10))
                             .foregroundStyle(AppTheme.secondaryText)
                     }
@@ -134,6 +134,17 @@ private struct WishlistRow: View {
 
     private var targetPrice: Double {
         item.targetPrice ?? figure.msrp
+    }
+
+    private var displayedPrice: Double {
+        item.lastKnownPrice ?? targetPrice
+    }
+
+    private var priceLabel: String {
+        if item.lastKnownPrice != nil {
+            return "Avg. Market Price"
+        }
+        return item.targetPrice == nil ? "MSRP Target" : "Target Price"
     }
 
     private var trend: (direction: TrendBadge.Direction, percent: Double)? {
