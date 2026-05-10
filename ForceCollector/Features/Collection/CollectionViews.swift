@@ -414,13 +414,15 @@ private struct CollectionFigureTile: View {
                     .frame(height: 190)
                     .clipped()
 
-                if owned {
-                    StatusChip(title: "Owned", color: AppTheme.success)
-                        .padding(8)
-                } else if wishlisted {
-                    StatusChip(title: "Wishlist", color: Color(hex: "#C084FC"))
-                        .padding(8)
+                VStack(alignment: .trailing, spacing: 6) {
+                    if owned {
+                        StatusChip(title: "Owned", color: AppTheme.success)
+                    }
+                    if wishlisted {
+                        StatusChip(title: "Wishlist", color: Color(hex: "#C084FC"))
+                    }
                 }
+                .padding(8)
             }
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
 

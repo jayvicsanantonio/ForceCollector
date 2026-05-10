@@ -19,7 +19,7 @@ struct DashboardView: View {
             VStack(alignment: .leading, spacing: 24) {
                 HStack(spacing: 12) {
                     MetricCard(label: "Total Figs", value: "\(max(snapshot.totalCatalog, snapshot.ownedCount))", icon: "archivebox", accent: AppTheme.text)
-                    MetricCard(label: "Value", value: collectionValue(snapshot), icon: "dollarsign", accent: AppTheme.accent)
+                    MetricCard(label: "Value", value: collectionValue, icon: "dollarsign", accent: AppTheme.accent)
                     MetricCard(label: "Complete", value: snapshot.completionRatio.percentString, icon: "gauge", accent: AppTheme.text)
                 }
                 .padding(.horizontal, 16)
@@ -163,8 +163,8 @@ struct DashboardView: View {
         return item.acquiredAt >= threshold
     }
 
-    private func collectionValue(_ snapshot: AnalyticsSnapshot) -> String {
-        let value = snapshot.averageOwnedPrice * Double(max(snapshot.ownedCount, 1))
+    private var collectionValue: String {
+        let value = collection.compactMap(\.purchasePrice).reduce(0, +)
         return value >= 1000 ? "$\(String(format: "%.1fk", value / 1000))" : value.currencyString
     }
 }
