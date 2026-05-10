@@ -44,44 +44,40 @@ struct ForceCollectorRootView: View {
                 NavigationStack {
                     DashboardView(store: store, selectedTab: $selectedTab)
                 }
-                .tabItem {
-                    Label("Home", systemImage: "sparkles.square.filled.on.square")
-                }
                 .tag(AppTab.home)
+                .tabItem { Label(AppTab.home.title, systemImage: AppTab.home.icon) }
 
                 NavigationStack {
                     CollectionGridView(store: store)
                 }
-                .tabItem {
-                    Label("Collection", systemImage: "square.grid.2x2.fill")
-                }
                 .tag(AppTab.collection)
-
-                NavigationStack {
-                    ScanView(store: store)
-                }
-                .tabItem {
-                    Label("Scan", systemImage: "barcode.viewfinder")
-                }
-                .tag(AppTab.scan)
+                .tabItem { Label(AppTab.collection.title, systemImage: AppTab.collection.icon) }
 
                 NavigationStack {
                     WishlistView(store: store)
                 }
-                .tabItem {
-                    Label("Wishlist", systemImage: "star.bubble.fill")
-                }
                 .tag(AppTab.wishlist)
+                .tabItem { Label(AppTab.wishlist.title, systemImage: AppTab.wishlist.icon) }
+
+                NavigationStack {
+                    ScanView(store: store)
+                }
+                .tag(AppTab.scan)
+                .tabItem { Label(AppTab.scan.title, systemImage: AppTab.scan.icon) }
 
                 NavigationStack {
                     ProfileView(store: store)
                 }
-                .tabItem {
-                    Label("Profile", systemImage: "person.crop.circle.fill")
-                }
                 .tag(AppTab.profile)
+                .tabItem { Label(AppTab.profile.title, systemImage: AppTab.profile.icon) }
             }
-            .tint(AppTheme.accent)
+            .toolbar(.hidden, for: .tabBar)
+
+            VStack {
+                Spacer()
+                StitchTabBar(selectedTab: $selectedTab)
+            }
+            .ignoresSafeArea(.keyboard, edges: .bottom)
 
             if showSplash {
                 SplashView()
@@ -98,56 +94,53 @@ struct ForceCollectorRootView: View {
     }
 }
 
-enum AppTab: Hashable {
+enum AppTab: Hashable, CaseIterable {
     case home
     case collection
     case scan
     case wishlist
     case profile
+
+    static let allCases: [AppTab] = [.home, .collection, .wishlist, .scan, .profile]
 }
 
 private struct SplashView: View {
     var body: some View {
         ZStack {
-            AppTheme.background
+            StitchRemoteImage(urlString: StitchAsset.splash, contentMode: .fill)
                 .ignoresSafeArea()
 
             LinearGradient(
-                colors: [AppTheme.accent.opacity(0.6), .clear, AppTheme.gold.opacity(0.3)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
+                colors: [.black.opacity(0.15), AppTheme.background.opacity(0.72), AppTheme.background],
+                startPoint: .top,
+                endPoint: .bottom
             )
-            .blur(radius: 36)
             .ignoresSafeArea()
 
             VStack(spacing: 18) {
-                Image(systemName: "sparkles.tv.fill")
-                    .font(.system(size: 52, weight: .black))
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [AppTheme.gold, .white, AppTheme.accent],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+                Spacer()
 
                 VStack(spacing: 8) {
                     Text("Force Collector")
-                        .font(AppTheme.displayFont(size: 34, weight: .bold))
-                        .tracking(0.5)
+                        .font(AppTheme.displayFont(size: 38, weight: .bold))
 
-                    Text("Track every Black Series hunt, grail, and scan.")
-                        .font(.system(.subheadline, design: .rounded, weight: .medium))
-                        .foregroundStyle(AppTheme.secondaryText)
+                    Text("Your Black Series command center")
+                        .font(AppTheme.labelFont(size: 14, weight: .bold))
+                        .foregroundStyle(AppTheme.electric)
+                        .tracking(1.2)
+                        .textCase(.uppercase)
                 }
 
                 HStack(spacing: 10) {
                     ForEach(0..<3, id: \.self) { index in
                         Circle()
-                            .fill(index == 1 ? AppTheme.gold : AppTheme.accent.opacity(0.7))
+                            .fill(index == 1 ? AppTheme.electric : .white.opacity(0.35))
                             .frame(width: 8, height: 8)
                     }
                 }
+
+                Spacer()
+                    .frame(height: 84)
             }
             .padding(28)
             .frame(maxWidth: .infinity, maxHeight: .infinity)

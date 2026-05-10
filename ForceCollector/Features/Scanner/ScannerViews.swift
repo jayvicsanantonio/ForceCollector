@@ -10,81 +10,123 @@ struct ScanView: View {
 
     @State private var manualCode = ""
     @State private var currentResult: ScanLookupResult?
+    @State private var sessionScanCount = 0
     private let scannerService = ScannerService()
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                SectionTitle(
-                    eyebrow: "Fast Add",
-                    title: "Barcode Scanner",
-                    subtitle: "Scan a Black Series package to match a seeded figure or fall back to manual search."
-                )
+        ZStack {
+            StitchRemoteImage(urlString: StitchAsset.scanner, contentMode: .fill)
+                .ignoresSafeArea()
+                .opacity(0.52)
+                .blendMode(.overlay)
 
-                CollectorPanel {
-                    VStack(alignment: .leading, spacing: 14) {
-                        Text("Live scanner")
-                            .font(.system(.headline, design: .rounded, weight: .semibold))
+            LinearGradient(
+                colors: [.black.opacity(0.62), .clear, AppTheme.background.opacity(0.94)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
 
-                        scannerSurface
-                    }
+            VStack(spacing: 0) {
+                HStack {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 18, weight: .bold))
+                        .frame(width: 48, height: 48)
+                        .background(.black.opacity(0.42), in: Circle())
+                        .overlay(Circle().stroke(.white.opacity(0.12), lineWidth: 1))
+
+                    Spacer()
+
+                    Image(systemName: "bolt.fill")
+                        .font(.system(size: 18, weight: .bold))
+                        .frame(width: 48, height: 48)
+                        .background(.black.opacity(0.42), in: Circle())
+                        .overlay(Circle().stroke(.white.opacity(0.12), lineWidth: 1))
                 }
+                .foregroundStyle(.white)
+                .padding(.horizontal, 24)
+                .padding(.top, 18)
 
-                CollectorPanel {
-                    VStack(alignment: .leading, spacing: 14) {
-                        Text("Manual fallback")
-                            .font(.system(.headline, design: .rounded, weight: .semibold))
+                Spacer()
 
-                        TextField("Paste a barcode or figure name", text: $manualCode)
+                scannerSurface
+
+                Text("Align barcode within frame")
+                    .font(AppTheme.labelFont(size: 15, weight: .bold))
+                    .foregroundStyle(.white)
+                    .tracking(2)
+                    .textCase(.uppercase)
+                    .padding(.horizontal, 18)
+                    .padding(.vertical, 8)
+                    .background(.black.opacity(0.62), in: RoundedRectangle(cornerRadius: 4, style: .continuous))
+                    .padding(.top, 30)
+
+                Spacer()
+
+                VStack(spacing: 14) {
+                    HStack(spacing: 10) {
+                        Image(systemName: "keyboard")
+                            .font(.system(size: 18, weight: .bold))
+                        TextField("Enter code manually", text: $manualCode)
                             .textInputAutocapitalization(.never)
-                            .padding(14)
-                            .background(AppTheme.elevatedSurface, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-
-                        Button("Search or record scan") {
-                            submit(code: manualCode)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .tint(AppTheme.accent)
+                            .font(AppTheme.labelFont(size: 15, weight: .bold))
                     }
-                }
+                    .foregroundStyle(AppTheme.scannerCyan)
+                    .padding(14)
+                    .background(.black.opacity(0.28), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(AppTheme.scannerCyan.opacity(0.8), lineWidth: 2))
 
-                if let currentResult {
-                    ScanResultsView(result: currentResult, store: store)
+                    Button {
+                        submit(code: manualCode)
+                    } label: {
+                        Text("Search or Record Scan")
+                            .font(AppTheme.labelFont(size: 13, weight: .bold))
+                            .tracking(1.3)
+                            .textCase(.uppercase)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 14)
+                            .background(AppTheme.scannerCyan, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                            .foregroundStyle(AppTheme.background)
+                    }
+
+                    HStack(spacing: 6) {
+                        Image(systemName: "clock.arrow.circlepath")
+                        Text("Session Scans: \(sessionScanCount)")
+                    }
+                    .font(AppTheme.labelFont(size: 10, weight: .bold))
+                    .foregroundStyle(.white.opacity(0.62))
+                    .tracking(1.2)
+                    .textCase(.uppercase)
                 }
+                .padding(.horizontal, 24)
+                .padding(.bottom, currentResult == nil ? 112 : 16)
             }
-            .padding(20)
+
+            if let currentResult {
+                VStack {
+                    Spacer()
+                    ScanResultsView(result: currentResult, store: store)
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 96)
+                }
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
         }
         .background(AppTheme.background)
-        .navigationTitle("Scan")
-        .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .navigationBar)
     }
 
     @ViewBuilder
     private var scannerSurface: some View {
         #if targetEnvironment(simulator)
-        RoundedRectangle(cornerRadius: 28, style: .continuous)
-            .fill(AppTheme.elevatedSurface)
-            .frame(height: 280)
-            .overlay {
-                VStack(spacing: 16) {
-                    Image(systemName: "iphone.and.arrow.forward")
-                        .font(.system(size: 32, weight: .bold))
-                        .foregroundStyle(AppTheme.gold)
-                    Text("Simulator mode")
-                        .font(AppTheme.displayFont(size: 24, weight: .bold))
-                    Text("Use the manual fallback below. Camera capture is available on a physical iPhone build.")
-                        .font(.system(.subheadline, design: .rounded))
-                        .foregroundStyle(AppTheme.secondaryText)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 22)
-                }
-            }
+        ScannerHUDFrame()
         #else
         BarcodeScannerCameraView { code in
             submit(code: code)
         }
-        .frame(height: 280)
-        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .frame(width: 288, height: 288)
+        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .overlay(ScannerHUDFrame())
         #endif
     }
 
@@ -94,6 +136,7 @@ struct ScanView: View {
 
         let result = scannerService.resolveScan(code: trimmed, in: figures)
         currentResult = result
+        sessionScanCount += 1
         try? store.recordScan(code: trimmed, matchedFigureID: result.matchedFigure?.id, query: trimmed, context: modelContext)
         manualCode = ""
     }
@@ -104,12 +147,17 @@ struct ScanResultsView: View {
     let store: CollectionStore
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            SectionTitle(
-                eyebrow: "Result",
-                title: result.matchedFigure == nil ? "Scan Results" : "Matched Figure",
-                subtitle: result.matchedFigure == nil ? "No exact barcode hit. Here are the closest seeded options." : "The seeded catalog found a matching Black Series figure."
-            )
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                Image(systemName: result.matchedFigure == nil ? "questionmark.circle.fill" : "checkmark.circle.fill")
+                    .foregroundStyle(AppTheme.scannerCyan)
+                Text(result.matchedFigure == nil ? "Closest Matches" : "Target Identified")
+                    .font(AppTheme.labelFont(size: 13, weight: .bold))
+                    .foregroundStyle(AppTheme.scannerCyan)
+                    .tracking(1.1)
+                    .textCase(.uppercase)
+                Spacer()
+            }
 
             if let matchedFigure = result.matchedFigure {
                 NavigationLink {
@@ -164,6 +212,73 @@ struct ScanResultsView: View {
                 }
             }
         }
+        .padding(14)
+        .background(AppTheme.deepPanel.opacity(0.96), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 18).stroke(AppTheme.scannerCyan.opacity(0.2), lineWidth: 1))
+    }
+}
+
+private struct ScannerHUDFrame: View {
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                .stroke(AppTheme.scannerCyan.opacity(0.35), lineWidth: 1)
+                .frame(width: 288, height: 288)
+
+            Rectangle()
+                .fill(AppTheme.scannerCyan)
+                .frame(width: 288, height: 2)
+                .shadow(color: AppTheme.scannerCyan, radius: 12)
+                .offset(y: -56)
+
+            ForEach(HUDCorner.allCases, id: \.self) { corner in
+                HUDCornerShape(corner: corner)
+                    .stroke(AppTheme.scannerCyan, style: StrokeStyle(lineWidth: 4, lineCap: .square, lineJoin: .miter))
+                    .frame(width: 34, height: 34)
+                    .position(corner.position(in: CGSize(width: 288, height: 288)))
+            }
+        }
+        .frame(width: 288, height: 288)
+    }
+}
+
+private enum HUDCorner: CaseIterable {
+    case topLeft, topRight, bottomRight, bottomLeft
+
+    func position(in size: CGSize) -> CGPoint {
+        switch self {
+        case .topLeft: CGPoint(x: 17, y: 17)
+        case .topRight: CGPoint(x: size.width - 17, y: 17)
+        case .bottomRight: CGPoint(x: size.width - 17, y: size.height - 17)
+        case .bottomLeft: CGPoint(x: 17, y: size.height - 17)
+        }
+    }
+}
+
+private struct HUDCornerShape: Shape {
+    let corner: HUDCorner
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        switch corner {
+        case .topLeft:
+            path.move(to: CGPoint(x: rect.minX, y: rect.maxY))
+            path.addLine(to: CGPoint(x: rect.minX, y: rect.minY))
+            path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+        case .topRight:
+            path.move(to: CGPoint(x: rect.minX, y: rect.minY))
+            path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+            path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        case .bottomRight:
+            path.move(to: CGPoint(x: rect.maxX, y: rect.minY))
+            path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+            path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+        case .bottomLeft:
+            path.move(to: CGPoint(x: rect.maxX, y: rect.maxY))
+            path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+            path.addLine(to: CGPoint(x: rect.minX, y: rect.minY))
+        }
+        return path
     }
 }
 
@@ -262,21 +377,6 @@ final class ScannerPreviewView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .black
-
-        let overlay = UIView()
-        overlay.backgroundColor = .clear
-        overlay.layer.borderColor = UIColor.white.withAlphaComponent(0.22).cgColor
-        overlay.layer.borderWidth = 2
-        overlay.layer.cornerRadius = 24
-        overlay.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(overlay)
-
-        NSLayoutConstraint.activate([
-            overlay.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
-            overlay.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
-            overlay.topAnchor.constraint(equalTo: topAnchor, constant: 40),
-            overlay.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40)
-        ])
     }
 
     @available(*, unavailable)

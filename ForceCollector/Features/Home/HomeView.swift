@@ -15,139 +15,157 @@ struct DashboardView: View {
     var body: some View {
         let snapshot = analytics.snapshot(figures: figures, collection: collection, wishlist: wishlist)
 
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                SectionTitle(
-                    eyebrow: "Black Series HQ",
-                    title: "Collector Dashboard",
-                    subtitle: "Your local-first command center for the hunt, the shelf, and the wishlist."
-                )
+        StitchScreen(title: "Collector", subtitle: "Welcome back", trailingIcon: "gearshape.fill") {
+            VStack(alignment: .leading, spacing: 24) {
+                HStack(spacing: 12) {
+                    MetricCard(label: "Total Figs", value: "\(max(snapshot.totalCatalog, snapshot.ownedCount))", icon: "archivebox", accent: AppTheme.text)
+                    MetricCard(label: "Value", value: collectionValue, icon: "dollarsign", accent: AppTheme.accent)
+                    MetricCard(label: "Complete", value: snapshot.completionRatio.percentString, icon: "gauge", accent: AppTheme.text)
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 16)
 
-                CollectorPanel {
-                    VStack(alignment: .leading, spacing: 18) {
-                        Text("Quick jump")
-                            .font(.system(.headline, design: .rounded, weight: .semibold))
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Text("Recent Drops")
+                            .font(AppTheme.displayFont(size: 18, weight: .bold))
+                        Spacer()
+                        Button("View All") {
+                            selectedTab = .collection
+                        }
+                        .font(AppTheme.labelFont(size: 12, weight: .bold))
+                        .foregroundStyle(AppTheme.electric)
+                        .textCase(.uppercase)
+                    }
+                    .padding(.horizontal, 16)
 
-                        HStack(spacing: 12) {
-                            dashboardButton("Scan a box", systemImage: "barcode.viewfinder", color: AppTheme.gold) {
-                                selectedTab = .scan
-                            }
-                            dashboardButton("Open collection", systemImage: "shippingbox.fill", color: AppTheme.accent) {
-                                selectedTab = .collection
-                            }
-                            NavigationLink {
-                                AnalyticsView(snapshot: snapshot)
-                            } label: {
-                                dashboardCard("Stats", systemImage: "chart.xyaxis.line", color: AppTheme.success)
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 16) {
+                            ForEach(recentFigures, id: \.id) { figure in
+                                NavigationLink {
+                                    FigureDetailView(figure: figure, store: store)
+                                } label: {
+                                    RecentDropCard(
+                                        figure: figure,
+                                        isNew: isRecentlyAcquired(figure)
+                                    )
+                                }
+                                .buttonStyle(.plain)
                             }
                         }
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 4)
                     }
                 }
 
-                HStack(spacing: 14) {
-                    MetricCard(label: "Owned figures", value: "\(snapshot.ownedCount)", icon: "tray.full.fill", accent: AppTheme.accent)
-                    MetricCard(label: "Wishlist", value: "\(snapshot.wishlistCount)", icon: "star.fill", accent: AppTheme.gold)
-                }
+                CollectorPanel {
+                    VStack(alignment: .leading, spacing: 16) {
+                        HStack {
+                            Text("Hunt Progress")
+                                .font(AppTheme.displayFont(size: 18, weight: .bold))
+                                .textCase(.uppercase)
+                            Spacer()
+                            Image(systemName: "bookmark")
+                                .font(.system(size: 16, weight: .bold))
+                                .foregroundStyle(AppTheme.electric)
+                                .frame(width: 32, height: 32)
+                                .background(AppTheme.surface, in: Circle())
+                        }
 
-                HStack(spacing: 14) {
-                    MetricCard(label: "Completion", value: snapshot.completionRatio.percentString, icon: "gauge.high", accent: AppTheme.success)
-                    MetricCard(label: "Favorites", value: "\(snapshot.favoriteCount)", icon: "heart.fill", accent: AppTheme.danger)
-                }
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack(alignment: .bottom) {
+                                Text("Phase 4 Collection")
+                                    .font(AppTheme.labelFont(size: 14, weight: .medium))
+                                    .foregroundStyle(.white.opacity(0.86))
+                                Spacer()
+                                Text(snapshot.completionRatio.percentString)
+                                    .font(AppTheme.labelFont(size: 12, weight: .bold))
+                                    .foregroundStyle(AppTheme.electric)
+                            }
 
-                if let recent = recentFigures.prefix(3).first {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Recent addition")
-                            .font(.system(.headline, design: .rounded, weight: .semibold))
-                        NavigationLink {
-                            FigureDetailView(figure: recent, store: store)
+                            GeometryReader { proxy in
+                                ZStack(alignment: .leading) {
+                                    RoundedRectangle(cornerRadius: 999)
+                                        .fill(AppTheme.background)
+                                    if snapshot.completionRatio > 0 {
+                                        RoundedRectangle(cornerRadius: 999)
+                                            .fill(AppTheme.electric)
+                                            .frame(width: max(8, proxy.size.width * snapshot.completionRatio))
+                                            .shadow(color: AppTheme.electric.opacity(0.55), radius: 12)
+                                    }
+                                }
+                            }
+                            .frame(height: 10)
+
+                            Text("\(max(snapshot.totalCatalog - snapshot.ownedCount, 0)) figures remaining to complete this wave.")
+                                .font(AppTheme.labelFont(size: 12, weight: .medium))
+                                .foregroundStyle(AppTheme.navIcon.opacity(0.6))
+                        }
+
+                        Button {
+                            selectedTab = .wishlist
                         } label: {
-                            FigureHeroCard(
-                                figure: recent,
-                                owned: true,
-                                wishlisted: store.isWishlisted(recent.id, items: wishlist)
-                            )
+                            HStack {
+                                Spacer()
+                                Text("View Wishlist")
+                                    .font(AppTheme.labelFont(size: 14, weight: .bold))
+                                Image(systemName: "arrow.right")
+                                    .font(.system(size: 14, weight: .bold))
+                                    .foregroundStyle(AppTheme.electric)
+                                Spacer()
+                            }
+                            .padding(.vertical, 13)
+                            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                            .overlay(RoundedRectangle(cornerRadius: 12).stroke(AppTheme.border, lineWidth: 1))
                         }
                         .buttonStyle(.plain)
                     }
                 }
+                .padding(.horizontal, 16)
 
-                CollectorPanel {
-                    VStack(alignment: .leading, spacing: 14) {
-                        Text("Era progress")
-                            .font(.system(.headline, design: .rounded, weight: .semibold))
-
-                        ForEach(snapshot.byEra, id: \.0) { era, count in
-                            VStack(alignment: .leading, spacing: 8) {
-                                HStack {
-                                    Text(era.rawValue)
-                                        .font(.system(.subheadline, design: .rounded, weight: .medium))
-                                    Spacer()
-                                    Text("\(count)")
-                                        .foregroundStyle(AppTheme.gold)
-                                }
-
-                                GeometryReader { proxy in
-                                    let progress = snapshot.ownedCount == 0 ? 0 : CGFloat(count) / CGFloat(max(snapshot.ownedCount, 1))
-                                    RoundedRectangle(cornerRadius: 999)
-                                        .fill(AppTheme.elevatedSurface)
-                                        .overlay(alignment: .leading) {
-                                            RoundedRectangle(cornerRadius: 999)
-                                                .fill(Color(hex: colorHex(for: era)))
-                                                .frame(width: proxy.size.width * progress)
-                                        }
-                                }
-                                .frame(height: 10)
-                            }
-                        }
-                    }
+                NavigationLink {
+                    AnalyticsView(snapshot: snapshot)
+                } label: {
+                    AnalyticsPromo()
                 }
+                .buttonStyle(.plain)
+                .padding(.horizontal, 16)
             }
-            .padding(20)
         }
-        .scrollIndicators(.hidden)
-        .background(AppTheme.background)
-        .navigationBarTitleDisplayMode(.inline)
     }
 
     private var recentFigures: [CatalogFigure] {
         let recentIDs = collection.map(\.figureID)
-        return repository.figures(for: recentIDs, in: figures)
+        let recentIDSet = Set(recentIDs)
+        let owned = repository.figures(for: recentIDs, in: figures)
+        if owned.isEmpty {
+            return Array(figures.sorted { left, right in
+                if StitchAsset.hasFigureImage(for: left) != StitchAsset.hasFigureImage(for: right) {
+                    return StitchAsset.hasFigureImage(for: left)
+                }
+                return left.sortIndex < right.sortIndex
+            }.prefix(6))
+        }
+        var result = Array(owned.prefix(6))
+        if result.count < 6 {
+            result.append(contentsOf: figures.lazy.filter { recentIDSet.contains($0.id) == false }.prefix(6 - result.count))
+        }
+        return result
     }
 
-    @ViewBuilder
-    private func dashboardButton(_ title: String, systemImage: String, color: Color, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            dashboardCard(title, systemImage: systemImage, color: color)
+    private func isRecentlyAcquired(_ figure: CatalogFigure) -> Bool {
+        guard let item = collection.first(where: { $0.figureID == figure.id }),
+              let threshold = Calendar.current.date(byAdding: .day, value: -14, to: .now)
+        else {
+            return false
         }
-        .buttonStyle(.plain)
+
+        return item.acquiredAt >= threshold
     }
 
-    private func dashboardCard(_ title: String, systemImage: String, color: Color) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Image(systemName: systemImage)
-                .font(.system(size: 18, weight: .black))
-                .padding(10)
-                .background(color.opacity(0.18), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-
-            Text(title)
-                .font(.system(.subheadline, design: .rounded, weight: .semibold))
-                .multilineTextAlignment(.leading)
-                .foregroundStyle(AppTheme.text)
-        }
-        .frame(maxWidth: .infinity, minHeight: 112, alignment: .topLeading)
-        .padding(14)
-        .background(AppTheme.elevatedSurface, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
-    }
-
-    private func colorHex(for era: FigureEra) -> String {
-        switch era {
-        case .prequel: return "#4AC0E0"
-        case .cloneWars: return "#3F7BFF"
-        case .original: return "#F6C453"
-        case .sequel: return "#FF7D85"
-        case .mando: return "#66D7A4"
-        case .gamingGreats: return "#A56EFF"
-        }
+    private var collectionValue: String {
+        let value = collection.compactMap(\.purchasePrice).reduce(0, +)
+        return value >= 1000 ? "$\(String(format: "%.1fk", value / 1000))" : value.currencyString
     }
 }
 
@@ -155,30 +173,30 @@ struct AnalyticsView: View {
     let snapshot: AnalyticsSnapshot
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
+        StitchScreen(title: "Analytics", trailingIcon: "chart.xyaxis.line", showsBackButton: true) {
+            VStack(alignment: .leading, spacing: 16) {
                 SectionTitle(
                     eyebrow: "Collection Intel",
                     title: "Analytics & Stats",
-                    subtitle: "Local insights from your owned shelves and wanted grails."
+                    subtitle: "Local insights from your shelves, watchlist, status mix, and collection coverage."
                 )
 
-                HStack(spacing: 14) {
-                    MetricCard(label: "Average buy", value: snapshot.averageOwnedPrice.currencyString, icon: "creditcard.fill", accent: AppTheme.gold)
+                HStack(spacing: 12) {
+                    MetricCard(label: "Average buy", value: snapshot.averageOwnedPrice.currencyString, icon: "creditcard.fill", accent: AppTheme.electric)
                     MetricCard(label: "Wishlist value", value: snapshot.recentWishlistValue.currencyString, icon: "tag.fill", accent: AppTheme.accent)
                 }
 
                 CollectorPanel {
                     VStack(alignment: .leading, spacing: 14) {
-                        Text("Status mix")
-                            .font(.system(.headline, design: .rounded, weight: .semibold))
+                        Text("Status Mix")
+                            .font(AppTheme.displayFont(size: 18, weight: .bold))
 
                         ForEach(snapshot.byStatus, id: \.0) { status, count in
                             HStack {
                                 StatusChip(title: status.rawValue, color: status.color)
                                 Spacer()
                                 Text("\(count)")
-                                    .font(AppTheme.displayFont(size: 20, weight: .bold))
+                                    .font(AppTheme.displayFont(size: 22, weight: .bold))
                             }
                         }
                     }
@@ -187,36 +205,90 @@ struct AnalyticsView: View {
                 CollectorPanel {
                     VStack(alignment: .leading, spacing: 14) {
                         Text("Coverage")
-                            .font(.system(.headline, design: .rounded, weight: .semibold))
+                            .font(AppTheme.displayFont(size: 18, weight: .bold))
 
                         Text("\(snapshot.ownedCount) of \(snapshot.totalCatalog) seeded figures tracked.")
-                            .font(.system(.body, design: .rounded))
+                            .font(AppTheme.labelFont(size: 15))
                             .foregroundStyle(AppTheme.secondaryText)
 
                         GeometryReader { proxy in
-                            RoundedRectangle(cornerRadius: 999)
-                                .fill(AppTheme.elevatedSurface)
-                                .overlay(alignment: .leading) {
-                                    RoundedRectangle(cornerRadius: 999)
-                                        .fill(
-                                            LinearGradient(
-                                                colors: [AppTheme.accent, AppTheme.gold],
-                                                startPoint: .leading,
-                                                endPoint: .trailing
-                                            )
-                                        )
-                                        .frame(width: proxy.size.width * snapshot.completionRatio)
-                                }
+                            ZStack(alignment: .leading) {
+                                RoundedRectangle(cornerRadius: 999).fill(AppTheme.background)
+                                RoundedRectangle(cornerRadius: 999)
+                                    .fill(LinearGradient(colors: [AppTheme.accent, AppTheme.electric], startPoint: .leading, endPoint: .trailing))
+                                    .frame(width: proxy.size.width * snapshot.completionRatio)
+                            }
                         }
                         .frame(height: 14)
                     }
                 }
             }
-            .padding(20)
+            .padding(16)
         }
-        .background(AppTheme.background)
-        .navigationTitle("Stats")
-        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+private struct RecentDropCard: View {
+    let figure: CatalogFigure
+    let isNew: Bool
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            ZStack(alignment: .topTrailing) {
+                StitchFigureArtwork(figure: figure, contentMode: .fill)
+                    .frame(width: 128, height: 214)
+                    .clipped()
+                    .overlay(
+                        LinearGradient(colors: [.clear, .black.opacity(0.82)], startPoint: .center, endPoint: .bottom)
+                    )
+
+                if isNew {
+                    StatusChip(title: "New", color: AppTheme.electric)
+                        .padding(8)
+                }
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 12).stroke(AppTheme.border, lineWidth: 1))
+
+            Text(figure.name)
+                .font(AppTheme.labelFont(size: 14, weight: .bold))
+                .foregroundStyle(AppTheme.text)
+                .lineLimit(1)
+
+            Text(figure.subtitle)
+                .font(AppTheme.labelFont(size: 11))
+                .foregroundStyle(AppTheme.navIcon.opacity(0.5))
+                .lineLimit(1)
+        }
+        .frame(width: 128, alignment: .leading)
+    }
+}
+
+private struct AnalyticsPromo: View {
+    var body: some View {
+        ZStack(alignment: .bottomLeading) {
+            StitchRemoteImage(urlString: StitchAsset.splash, contentMode: .fill)
+                .frame(height: 170)
+                .clipped()
+
+            LinearGradient(colors: [.clear, AppTheme.background.opacity(0.94)], startPoint: .top, endPoint: .bottom)
+
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Pre-Order")
+                    .font(AppTheme.labelFont(size: 10, weight: .bold))
+                    .foregroundStyle(AppTheme.background)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(AppTheme.electric, in: RoundedRectangle(cornerRadius: 4, style: .continuous))
+
+                Text("Collection Analytics & Stats")
+                    .font(AppTheme.displayFont(size: 18, weight: .bold))
+                    .foregroundStyle(AppTheme.text)
+            }
+            .padding(16)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 16).stroke(AppTheme.border, lineWidth: 1))
     }
 }
 
